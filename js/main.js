@@ -37,10 +37,10 @@ window.addEventListener('DOMContentLoaded', function() {
                 }
             });
 		}
-	});
+	}); 
 
     //TIMER
-    const deadline="2021-12-07";
+    const deadline="2021-12-07";    
     function getTimeRemaining(endtime){
         const t=Date.parse(endtime)-Date.parse(new Date()),
             days=Math.floor(t/(1000*60*60*24)),
@@ -88,7 +88,7 @@ window.addEventListener('DOMContentLoaded', function() {
 
 
     //M O D A L
-
+ 
     const modalTrigger=document.querySelectorAll('[data-modal]'),
           modal=document.querySelector('.modal'),
           modalCloseBtn=document.querySelector('[data-close]');
@@ -217,48 +217,52 @@ function postData(form){
     });
 }
 
-let karta={
-        name:'Nemo',
-        age:'32',
-        occupation:"penguin's striking",
-        motherland:'Germany',
-        wife:'Marie'
-    };
-const prom = new Promise((resolve,reject)=>{
+//SLIDER
+
+let slideIndex = 1;
+
+const slides = document.querySelectorAll('.offer__slide'),
+    prev   = document.querySelector('.offer__slider-prev'),
+    next   = document.querySelector('.offer__slider-next'),
+    total = document.querySelector('#total'),
+    current = document.querySelector('#current');
+
+showSlides(slideIndex);
+
+if(slides.length<10){
+    total.textContent=`0${slides.length}`;
+} else{
+    total.textContent=`${slides.length}`;
+}
+
+
+
+function showSlides(n){
+    if(n>slides.length){
+        slideIndex=1;
+    }
+    if (n<1){
+        slideIndex=slides.length;
+    }
+
+    slides.forEach(item => item.style.display = 'none');
+    slides[slideIndex-1].style.display='block';
     
-    setTimeout(()=>resolve(karta) ,3000);
-});
-prom.then((data)=>{
-    return new Promise((resolve,reject)=>{
-      
-        data.name=`Great ${data.name}`;
-        console.log(data.name);
-        resolve(data);
-    });
-   
-}).then(data=>{
-  data.age=`${data.age} years old`;
-  console.log(data.age);
-  return data;
-}).then((data)=>{
-    data.wife=`Cherry Pretty Lady ${data.wife}`;
-    console.log(data.wife);
-    return data;
-}).then((data)=>{
-    for(let i in data){
-        console.log(data[i]);
-    }   
-}).finally(()=>{
-    console.log('The End');
+    if(slides.length<10){
+        current.textContent=`0${slideIndex}`;
+    } else{
+        current.textContent=`${slideIndex}`;
+    }
+}
+
+function changeIndex(n){
+    showSlides(slideIndex+=n);
+}
+
+prev.addEventListener('click',()=>{
+    changeIndex(-1);
 });
 
-
-const mer=['2','0','1','7'];
-let mer2='';
-
-mer.forEach((item,i)=>{
-    mer2+=mer[i];
+next.addEventListener('click',()=>{
+    changeIndex(1);
 });
-console.log(typeof(mer2));
-mer2 = +mer2;
-console.log(typeof(mer2));
