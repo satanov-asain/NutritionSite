@@ -284,8 +284,41 @@ window.addEventListener('DOMContentLoaded', function () {
         slidesWrapper = document.querySelector('.offer__slider-wrapper'),
         slidesField = document.querySelector('.offer__slider-inner'),
         widthCSS = window.getComputedStyle(slidesWrapper).width,
-        width = +widthCSS.slice(0, widthCSS.length - 2);
+        widthNum = +widthCSS.slice(0, widthCSS.length - 2);
 
+    function isCurrentZero() {
+        if (slides.length < 10) {
+            current.textContent = `0${slideIndex}`;
+        } else {
+            current.textContent = `${slideIndex}`;
+        }
+    }
+
+    function  dotActive(){
+        
+        dots.forEach(dot => dot.style.opacity = 0.5);
+            dots[slideIndex - 1].style.opacity = 1;
+    }
+
+    function changeSlideIndex (oper){
+        switch (oper) {
+            case '+':
+                if (slideIndex == slides.length) {
+                    slideIndex = 1;
+                } else {
+                    slideIndex++;
+                }
+                break;
+            case '-':
+                if (slideIndex == 1) {
+                    slideIndex = slides.length;
+                } else {
+                    slideIndex--;
+                }
+                break;
+        }
+        return slideIndex;
+    }
     slides.forEach(slide => {
         slide.style.width = widthCSS;
     });
@@ -307,7 +340,7 @@ window.addEventListener('DOMContentLoaded', function () {
     indicators.classList.add('carousel-indicators');
     slider.append(indicators);
 
-    for ( let i = 0 ; i < slides.length ; i++ ) {
+    for (let i = 0; i < slides.length; i++) {
         const dot = document.createElement('li');
         dot.classList.add('dot');
         dot.setAttribute('data-slide-to', i + 1);
@@ -327,67 +360,43 @@ window.addEventListener('DOMContentLoaded', function () {
     }
 
     next.addEventListener('click', () => {
-        if (offset == width * (slides.length - 1)) {
+        if (offset == widthNum * (slides.length - 1)) {
             offset = 0;
         } else {
-            offset += width;
+            offset += widthNum;
         }
         slidesField.style.transform = `translateX(-${offset}px)`;
-
-        if (slideIndex == slides.length) {
-            slideIndex = 1;
-        } else {
-            slideIndex++;
-        }
-        if (slides.length < 10) {
-            current.textContent = `0${slideIndex}`;
-        } else {
-            current.textContent = `${slideIndex}`;
-        }
-        dots.forEach(dot => dot.style.opacity = 0.5);
-        dots[slideIndex - 1].style.opacity = 1;
+        changeSlideIndex('+');
+        isCurrentZero();
+        dotActive();
     });
 
     prev.addEventListener('click', () => {
         if (offset == 0) {
-            offset = width * (slides.length - 1);
+            offset = widthNum * (slides.length - 1);
         } else {
-            offset -= width;
+            offset -= widthNum;
         }
         slidesField.style.transform = `translateX(-${offset}px)`;
-
-        if (slideIndex == 1) {
-            slideIndex = slides.length;
-        } else {
-            slideIndex--;
-        }
-        if (slides.length < 10) {
-            current.textContent = `0${slideIndex}`;
-        } else {
-            current.textContent = `${slideIndex}`;
-        }
-        dots.forEach(dot => dot.style.opacity = 0.5);
-        dots[slideIndex - 1].style.opacity = 1;
+        changeSlideIndex('-');
+        isCurrentZero();
+        dotActive();
     });
 
- 
+
 
     dots.forEach(dot => {
         dot.addEventListener('click', (e) => {
             const slideTo = e.target.getAttribute('data-slide-to');
             slideIndex = slideTo;
 
-            offset = (slideIndex - 1) * width;
+            offset = (slideIndex - 1) * widthNum;
             slidesField.style.transform = `translateX(-${offset}px)`;
 
             dots.forEach(dot => dot.style.opacity = 0.5);
             dots[slideIndex - 1].style.opacity = 1;
 
-            if (slides.length < 10) {
-                current.textContent = `0${slideIndex}`;
-            } else {
-                current.textContent = `${slideIndex}`;
-            }
+           isCurrentZero();
 
         });
     });
