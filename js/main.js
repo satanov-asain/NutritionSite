@@ -283,8 +283,8 @@ window.addEventListener('DOMContentLoaded', function () {
         current = document.querySelector('#current'),
         slidesWrapper = document.querySelector('.offer__slider-wrapper'),
         slidesField = document.querySelector('.offer__slider-inner'),
-        widthCSS = window.getComputedStyle(slidesWrapper).width,
-        widthNum = +widthCSS.slice(0, widthCSS.length - 2);
+        width = window.getComputedStyle(slidesWrapper).width;
+       
 
     function isCurrentZero() {
         if (slides.length < 10) {
@@ -318,8 +318,14 @@ window.addEventListener('DOMContentLoaded', function () {
         }
         return slideIndex;
     }
+
+    function strToNum(str){
+        const Num=Number(str.replace(/\D/ig,''));
+        return Num;
+    }
+
     slides.forEach(slide => {
-        slide.style.width = widthCSS;
+        slide.style.width = width;
     });
     slider.style.position = 'relative';
 
@@ -356,10 +362,10 @@ window.addEventListener('DOMContentLoaded', function () {
     }
 
     next.addEventListener('click', () => {
-        if (offset == widthNum * (slides.length - 1)) {
+        if (offset == strToNum(width) * (slides.length - 1)) {
             offset = 0;
         } else {
-            offset += widthNum;
+            offset += strToNum(width);
         }
         slidesField.style.transform = `translateX(-${offset}px)`;
         changeSlideIndex('+');
@@ -369,9 +375,9 @@ window.addEventListener('DOMContentLoaded', function () {
 
     prev.addEventListener('click', () => {
         if (offset == 0) {
-            offset = widthNum * (slides.length - 1);
+            offset = strToNum(width) * (slides.length - 1);
         } else {
-            offset -= widthNum;
+            offset -= strToNum(width);
         }
         slidesField.style.transform = `translateX(-${offset}px)`;
         changeSlideIndex('-');
@@ -384,7 +390,7 @@ window.addEventListener('DOMContentLoaded', function () {
             const slideTo = e.target.getAttribute('data-slide-to');
             slideIndex = slideTo;
 
-            offset = (slideIndex - 1) * widthNum;
+            offset = (slideIndex - 1) * strToNum(width);
             slidesField.style.transform = `translateX(-${offset}px)`;
             dotActive();
             isCurrentZero();
@@ -412,6 +418,7 @@ window.addEventListener('DOMContentLoaded', function () {
     function calcTotal() {
         if (!sex || !height || !weight || !age || !ratio) {
             resultCalories.textContent = '____';
+            return;
         } else {
             switch (sex) {
                 case 'female':
@@ -486,9 +493,4 @@ window.addEventListener('DOMContentLoaded', function () {
     getDynamicInformation('#height');
     getDynamicInformation('#age');
     getDynamicInformation('#weight');
-
-    const ans=prompt('Name');
-
-    const reg = /n/;
-    console.log(ans.search(reg));
-}); 
+});
