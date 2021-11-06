@@ -1,14 +1,21 @@
 {
-  "name": "assadietology",
+  "name": "nutrition",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
+  "dependencies": {},
+  "devDependencies": {},
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/satanov-asain/NutritionSite.git"
+  },
   "author": "",
   "license": "ISC",
-  "devDependencies": {
-    "json-server": "^0.17.0"
-  }
+  "bugs": {
+    "url": "https://github.com/satanov-asain/NutritionSite/issues"
+  },
+  "homepage": "https://github.com/satanov-asain/NutritionSite#readme"
 }
