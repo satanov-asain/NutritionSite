@@ -133,7 +133,44 @@ window.addEventListener('DOMContentLoaded', function () {
     }
     window.addEventListener('scroll', showModalByScroll);
 
+    //ИСПОЛЬЗОВАНИЕ КЛАССОВ ДЛЯ СОЗДАНИЯ МЕНЮ-КАРТ
 
+    class MenuCard {
+        constructor(src, alt, title, descr, price, parentSelector) {
+            this.src = src;
+            this.alt = alt;
+            this.title = title;
+            this.descr = descr;
+            this.price = price;
+            this.parent = document.querySelector(parentSelector);
+            this.course = 12;
+            this.changeToTenge();
+        }
+
+        changeToTenge() {
+            return (this.price * this.course);
+        }
+
+        renderMenu() {
+            const cardElement = document.createElement('div');
+            cardElement.innerHTML = ` 
+            <div class="menu__item"><img src=${this.src} alt=${this.alt}>
+            <h3 class="menu__item-subtitle">Меню ${this.title}</h3>
+            <div class="menu__item-descr">${this.descr}</div>
+            <div class="menu__item-divider"></div>
+            <div class="menu__item-price">
+                <div class="menu__item-cost">Цена:</div>
+                <div class="menu__item-total"><span>${this.changeToTenge()}</span> тенге/день</div>
+            </div>
+            </div>`;
+            this.parent.append(cardElement);
+        }
+    }
+
+    new MenuCard("img/tabs/vegy.jpg", "vegy", '"Фитнес"', 'Меню "Фитнес" - это новый подход к приготовлению блюд: больше свежих овощей и фруктов. Продукт активных и здоровых людей. Это абсолютно новый продукт с оптимальной ценой и высоким качеством!', 229,'.menu__field div').renderMenu();
+    new MenuCard("img/tabs/elite.jpg","elite",'“Премиум”','В меню “Премиум” мы используем не только красивый дизайн упаковки, но и качественное исполнение блюд. Красная рыба, морепродукты, фрукты - ресторанное меню без похода в ресторан!',550,'.menu__field div').renderMenu();
+    new MenuCard("img/tabs/post.jpg","post",'"Постное"','Меню “Постное” - это тщательный подбор ингредиентов: полное отсутствие продуктов животного происхождения, молоко из миндаля, овса, кокоса или гречки, правильное количество белков за счет тофу и импортных вегетарианских стейков.',430,
+    '.menu__field div').renderMenu();
 
     /* //This КОНТЕКСТ ВЫЗОВА - ПРИМЕР СЦЕПКИ ОБЪЕКТА К ФУНКЦИИ(ПЕРЕДАЧА ОБЪЕКТА КАК АРГУМЕНТА В ФУНКЦИЮ)
     function greeting(eventParty){
@@ -284,7 +321,7 @@ window.addEventListener('DOMContentLoaded', function () {
         slidesWrapper = document.querySelector('.offer__slider-wrapper'),
         slidesField = document.querySelector('.offer__slider-inner'),
         width = window.getComputedStyle(slidesWrapper).width;
-       
+
 
     function isCurrentZero() {
         if (slides.length < 10) {
@@ -319,8 +356,8 @@ window.addEventListener('DOMContentLoaded', function () {
         return slideIndex;
     }
 
-    function strToNum(str){
-        const Num=Number(str.replace(/\D/ig,''));
+    function strToNum(str) {
+        const Num = Number(str.replace(/\D/ig, ''));
         return Num;
     }
 
@@ -474,14 +511,15 @@ window.addEventListener('DOMContentLoaded', function () {
             calcTotal();
         });
     }
-    function initialCalc(selector,activeClass){
-        const elements=document.querySelectorAll(selector);
-        elements.forEach(elem=>{
+
+    function initialCalc(selector, activeClass) {
+        const elements = document.querySelectorAll(selector);
+        elements.forEach(elem => {
             elem.classList.remove(activeClass);
-            if(elem.getAttribute('id')===localStorage.getItem('sex')){
+            if (elem.getAttribute('id') === localStorage.getItem('sex')) {
                 elem.classList.add(activeClass);
             }
-            if(elem.getAttribute('data-ratio')===localStorage.getItem('ratio')){
+            if (elem.getAttribute('data-ratio') === localStorage.getItem('ratio')) {
                 elem.classList.add(activeClass);
             }
         });
