@@ -92,9 +92,8 @@ window.addEventListener('DOMContentLoaded', function () {
     //M O D A L
 
     const modalTrigger = document.querySelectorAll('[data-modal]'),
-        modal = document.querySelector('.modal'),
-        modalCloseBtn = document.querySelector('[data-close]');
-    const modalTimerId = setTimeout(openModal, 3000);
+        modal = document.querySelector('.modal');
+    const modalTimerId = setTimeout(openModal, 30000);
 
     function openModal() {
         modal.classList.add('show');
@@ -111,10 +110,9 @@ window.addEventListener('DOMContentLoaded', function () {
         modal.classList.add('hide');
         document.body.style.overflow = '';
     }
-    modalCloseBtn.addEventListener('click', closeModal);
-
+    
     modal.addEventListener('click', (e) => {
-        if (e.target === modal) {
+        if (e.target === modal||e.target.getAttribute('data-close')=='') {
             closeModal();
         }
     });
@@ -158,19 +156,35 @@ window.addEventListener('DOMContentLoaded', function () {
             <h3 class="menu__item-subtitle">Меню ${this.title}</h3>
             <div class="menu__item-descr">${this.descr}</div>
             <div class="menu__item-divider"></div>
-            <div class="menu__item-price">
-                <div class="menu__item-cost">Цена:</div>
-                <div class="menu__item-total"><span>${this.changeToTenge()}</span> тенге/день</div>
-            </div>
+                <div class="menu__item-price">
+                    <div class="menu__item-cost">Цена:</div>
+                    <div class="menu__item-total"><span>${this.changeToTenge()}</span> тенге/день</div>
+                </div>
             </div>`;
             this.parent.append(cardElement);
         }
     }
 
-    new MenuCard("img/tabs/vegy.jpg", "vegy", '"Фитнес"', 'Меню "Фитнес" - это новый подход к приготовлению блюд: больше свежих овощей и фруктов. Продукт активных и здоровых людей. Это абсолютно новый продукт с оптимальной ценой и высоким качеством!', 229,'.menu__field div').renderMenu();
-    new MenuCard("img/tabs/elite.jpg","elite",'“Премиум”','В меню “Премиум” мы используем не только красивый дизайн упаковки, но и качественное исполнение блюд. Красная рыба, морепродукты, фрукты - ресторанное меню без похода в ресторан!',550,'.menu__field div').renderMenu();
-    new MenuCard("img/tabs/post.jpg","post",'"Постное"','Меню “Постное” - это тщательный подбор ингредиентов: полное отсутствие продуктов животного происхождения, молоко из миндаля, овса, кокоса или гречки, правильное количество белков за счет тофу и импортных вегетарианских стейков.',430,
-    '.menu__field div').renderMenu();
+    new MenuCard("img/tabs/vegy.jpg",
+     "vegy",
+     '"Фитнес"',
+     'Меню "Фитнес" - это новый подход к приготовлению блюд: больше свежих овощей и фруктов. Продукт активных и здоровых людей. Это абсолютно новый продукт с оптимальной ценой и высоким качеством!',
+     229,
+     '.menu__field div'
+     ).renderMenu();
+    new MenuCard("img/tabs/elite.jpg",
+    "elite",
+    '“Премиум”',
+    'В меню “Премиум” мы используем не только красивый дизайн упаковки, но и качественное исполнение блюд. Красная рыба, морепродукты, фрукты - ресторанное меню без похода в ресторан!',550,
+    '.menu__field div'
+    ).renderMenu();
+    new MenuCard("img/tabs/post.jpg",
+    "post",
+    '"Постное"',
+    'Меню “Постное” - это тщательный подбор ингредиентов: полное отсутствие продуктов животного происхождения, молоко из миндаля, овса, кокоса или гречки, правильное количество белков за счет тофу и импортных вегетарианских стейков.',
+    430,
+    '.menu__field div'
+    ).renderMenu();
 
     /* //This КОНТЕКСТ ВЫЗОВА - ПРИМЕР СЦЕПКИ ОБЪЕКТА К ФУНКЦИИ(ПЕРЕДАЧА ОБЪЕКТА КАК АРГУМЕНТА В ФУНКЦИЮ)
     function greeting(eventParty){
@@ -211,8 +225,8 @@ window.addEventListener('DOMContentLoaded', function () {
 
     const forms = document.querySelectorAll('form');
     const message = {
-        success: 'Успешно отправлено',
-        loading: 'В Загрузке. Жди',
+        success: 'Спасибо. Мы свяжемся с Вами в ближайщее время',
+        loading: 'img/form/spinner.svg',
         failure: 'Неудачная попытка'
     };
 
@@ -223,10 +237,13 @@ window.addEventListener('DOMContentLoaded', function () {
     function postData(form) {
         form.addEventListener('submit', (e) => {
             e.preventDefault();
-            const statusMessage = document.createElement('div');
-            statusMessage.classList.add('status');
-            statusMessage.textContent = message.loading;
-            form.appendChild(statusMessage);
+            const loadingMessage = document.createElement('img');
+            loadingMessage.src=message.loading;
+            loadingMessage.style.cssText= `
+            display:block;
+            margin: 0 auto;
+            `; 
+            form.insertAdjacentHTML('afterend',loadingMessage); 
 
             const request = new XMLHttpRequest();
             request.open('POST', 'server.php');
@@ -242,17 +259,36 @@ window.addEventListener('DOMContentLoaded', function () {
             request.addEventListener('load', () => {
                 if (request.status === 200) {
                     console.log(request.response);
-                    statusMessage.textContent = message.success;
+                    showThanksModal(message.success);
                     form.reset();
-                    setTimeout(() => {
-                        statusMessage.remove();
-
-                    }, 2000);
+                    loadingMessage.remove();
                 } else {
-                    statusMessage.textContent = message.failure;
+                    showThanksModal(message.failure);
                 }
             });
         });
+    }
+
+    function showThanksModal(message){
+        const prevModal=document.querySelector('.modal__dialog');
+        prevModal.classList.add('hide');
+        openModal();
+        const thanksModal = document.createElement('div');
+        thanksModal.classList.add('modal__dialog');
+        thanksModal.innerHTML=`
+        <div class="modal__content">
+            <div data-close class="modal__close">&times;</div>
+            <div class="modal__title">${message}</div>   
+        </div>
+        `;
+        document.querySelector('.modal').append(thanksModal);
+        setTimeout(()=>{
+            thanksModal.remove();
+            prevModal.classList.remove('hide');
+            prevModal.classList.add('show');
+            closeModal();
+        },4000);
+
     }
 
     //SLIDER
