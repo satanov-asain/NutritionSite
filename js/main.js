@@ -233,6 +233,17 @@ window.addEventListener('DOMContentLoaded', function () {
     forms.forEach(form => {
         postData(form);
     });
+    
+    async function sendData(url, data){
+        const res=await fetch(url, {
+            method: 'POST',
+            headers:{
+                'Content-type':'application/json'
+            },
+            body:data
+        });
+        return await res.json();
+    }
 
     function postData(form) {
         form.addEventListener('submit', (e) => {
@@ -252,13 +263,7 @@ window.addEventListener('DOMContentLoaded', function () {
             });
             const myJSON = JSON.stringify(tempObj);
             
-            fetch('server.php', {
-                    method: 'POST',
-                    headers:{
-                        'Content-type':'application/json'
-                    },
-                    body: myJSON
-                })
+            sendData('http://localhost:3000/requests',myJSON)
                 .then(response=>{
                     console.log(response);
                     showThanksModal(message.success);
