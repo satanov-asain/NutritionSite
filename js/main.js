@@ -243,29 +243,31 @@ window.addEventListener('DOMContentLoaded', function () {
             display:block;
             margin: 0 auto;
             `; 
-            form.insertAdjacentHTML('afterend',loadingMessage); 
+            form.append(loadingMessage); 
 
-            const request = new XMLHttpRequest();
-            request.open('POST', 'server.php');
-            request.setRequestHeader('Content-type', 'application/json');
             const myFormData = new FormData(form);
             const tempObj = {};
             myFormData.forEach((value, key) => {
                 tempObj[key] = value;
             });
             const myJSON = JSON.stringify(tempObj);
-            request.send(myJSON);
-
-            request.addEventListener('load', () => {
-                if (request.status === 200) {
-                    console.log(request.response);
+            
+            fetch('server.php', {
+                    method: 'POST',
+                    headers:{
+                        'Content-type':'application/json'
+                    },
+                    body: myJSON
+                })
+                .then(response=>{
+                    console.log(response);
                     showThanksModal(message.success);
-                    form.reset();
                     loadingMessage.remove();
-                } else {
+                }).catch(()=>{
                     showThanksModal(message.failure);
-                }
-            });
+                }).finally(()=>{
+                    form.reset();
+                });
         });
     }
 
@@ -567,4 +569,7 @@ window.addEventListener('DOMContentLoaded', function () {
     getDynamicInformation('#height');
     getDynamicInformation('#age');
     getDynamicInformation('#weight');
+
+
+
 });
