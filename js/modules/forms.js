@@ -1,4 +1,5 @@
-function forms(){
+import {openModal, closeModal} from './modal';
+function forms(modalTimerId,modalSelector){
     /* ОТПРАВКА ФОРМЫ НА СЕРВЕР С Fetch API. With SVG */
 
     const forms = document.querySelectorAll('form');
@@ -35,17 +36,15 @@ function forms(){
             form.append(loadingMessage); 
 
             const myFormData = new FormData(form);
-            const tempObj = {};
-            myFormData.forEach((value, key) => {
-                tempObj[key] = value;
-            });
-            const myJSON = JSON.stringify(tempObj);
+            const myJSON = JSON.stringify(Object.fromEntries(myFormData.entries()));
             
             sendData('http://localhost:3000/requests',myJSON)
                 .then(response=>{
-                    console.log(response);
-                    showThanksModal(message.success);
-                    loadingMessage.remove();
+                    
+                        console.log(response);
+                        showThanksModal(message.success);
+                        loadingMessage.remove();
+                    
                 }).catch(()=>{
                     showThanksModal(message.failure);
                 }).finally(()=>{
@@ -57,7 +56,7 @@ function forms(){
     function showThanksModal(message){
         const prevModal=document.querySelector('.modal__dialog');
         prevModal.classList.add('hide');
-        openModal();
+        openModal(modalTimerId,modalSelector);
         const thanksModal = document.createElement('div');
         thanksModal.classList.add('modal__dialog');
         thanksModal.innerHTML=`
@@ -71,7 +70,7 @@ function forms(){
             thanksModal.remove();
             prevModal.classList.remove('hide');
             prevModal.classList.add('show');
-            closeModal();
+            closeModal(modalSelector);
         },4000);
 
     }    
