@@ -1,21 +1,21 @@
 function openModal(modalTimerId,modalSelector) {
-    const modal=document.querySelector(modalSelector);
-    modal.classList.add('show');
-    modal.classList.remove('hide');
+    const modalLocal=document.querySelector(modalSelector);
+    modalLocal.classList.add('show');
+    modalLocal.classList.remove('hide');
     document.body.style.overflow = 'hidden';
     clearInterval(modalTimerId);
 }
 function closeModal(modalSelector) {
-    const modal=document.querySelector(modalSelector);
-    modal.classList.remove('show');
-    modal.classList.add('hide');
+    const modalLocal=document.querySelector(modalSelector);
+    modalLocal.classList.remove('show');
+    modalLocal.classList.add('hide');
     document.body.style.overflow = '';
 } 
-function modal(modalTimerId,modalSelector) {
+function modal(modalTimerId,modalSelector,modalTriggerSelector) {
     //M O D A L
 
-    const modalTrigger = document.querySelectorAll('[data-modal]'),
-        modal = document.querySelector('.modal');
+    const modalTrigger = document.querySelectorAll(modalTriggerSelector),
+        modal = document.querySelector(modalSelector);
     
 
    

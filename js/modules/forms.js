@@ -1,5 +1,6 @@
 import {openModal, closeModal} from './modal';
-function forms(modalTimerId,modalSelector){
+import {sendData} from '../services/services.js';
+function forms(modalTimerId,modalSelector,modalDialogSelector){
     /* ОТПРАВКА ФОРМЫ НА СЕРВЕР С Fetch API. With SVG */
 
     const forms = document.querySelectorAll('form');
@@ -13,16 +14,6 @@ function forms(modalTimerId,modalSelector){
         postData(form);
     });
     
-    async function sendData(url, data){
-        const res=await fetch(url, {
-            method: 'POST',
-            headers:{
-                'Content-type':'application/json'
-            },
-            body:data
-        });
-        return await res.json();
-    }
 
     function postData(form) {
         form.addEventListener('submit', (e) => {
@@ -54,18 +45,18 @@ function forms(modalTimerId,modalSelector){
     }
 
     function showThanksModal(message){
-        const prevModal=document.querySelector('.modal__dialog');
+        const prevModal=document.querySelector(modalDialogSelector);
         prevModal.classList.add('hide');
         openModal(modalTimerId,modalSelector);
         const thanksModal = document.createElement('div');
-        thanksModal.classList.add('modal__dialog');
+        thanksModal.classList.add(modalDialogSelector.slice(1));
         thanksModal.innerHTML=`
         <div class="modal__content">
             <div data-close class="modal__close">&times;</div>
             <div class="modal__title">${message}</div>   
         </div>
         `;
-        document.querySelector('.modal').append(thanksModal);
+        document.querySelector(modalSelector).append(thanksModal);
         setTimeout(()=>{
             thanksModal.remove();
             prevModal.classList.remove('hide');

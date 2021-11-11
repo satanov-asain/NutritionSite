@@ -1,4 +1,5 @@
-function menuCards(){
+import {getResource} from '../services/services.js';
+function menuCards(parentSelector){
      //ИСПОЛЬЗОВАНИЕ КЛАССОВ ДЛЯ СОЗДАНИЯ МЕНЮ-КАРТ
 
      class MenuCard {
@@ -32,18 +33,12 @@ function menuCards(){
             this.parent.append(cardElement);
         }
     }
-     async function getMenuCard(url){
-        const res = await fetch(url);
-        if (!res.ok){
-            throw new Error(`Данные с ${url} не приняты. Статус - ${res.status}`);
-        }
-        return await res.json();
-     }
+    
 
-     getMenuCard('http://localhost:3000/menu')
+     getResource('http://localhost:3000/menu')
      .then(dataSeries=>{
          dataSeries.forEach(({img,altimg,title,descr,price})=>{
-            new MenuCard(img,altimg,title,descr,price,'.menu__field div').renderMenu();
+            new MenuCard(img,altimg,title,descr,price,parentSelector).renderMenu();
          });
      });
     // new MenuCard("img/tabs/vegy.jpg",
