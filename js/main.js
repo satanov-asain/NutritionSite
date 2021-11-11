@@ -1,13 +1,12 @@
-window.addEventListener('DOMContentLoaded', function () {
-    const tabs=require('./modules/tabs'),
-    forms=require('./modules/forms'),
-    timer=require('./modules/timer'),
-    modal=require('./modules/modal'),
-    menuCards=require('./modules/menuCards'),
-    slider=require('./modules/slider'),
-    calculator=require('./modules/calculator');
- 
+import tabs from './modules/tabs';
+import forms from './modules/forms';
+import timer from './modules/timer';
+import modal from './modules/modal';
+import menuCards from './modules/menuCards';
+import slider from './modules/slider';
+import calculator from './modules/calculator';
 
+window.addEventListener('DOMContentLoaded', function () {
     tabs();
     timer();
     forms();
